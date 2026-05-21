@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.qrasist"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:usesCleartextTraffic="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.QRAsist"
+
+        >
+
+
+        
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.QRAsist">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity 
+            android:name=".DashboardMaestroActivity"
+            android:theme="@style/Theme.QRAsist.Maestro" />
+        <activity 
+            android:name=".DashboardAlumnoActivity"
+            android:theme="@style/Theme.QRAsist.Alumno" />
+        <activity 
+            android:name=".ScannerActivity"
+            android:theme="@style/Theme.QRAsist.Maestro" />
+        <activity 
+            android:name=".GestionAlumnosActivity"
+            android:theme="@style/Theme.QRAsist.Maestro" />
+        <activity 
+            android:name=".GestionTareasActivity"
+            android:theme="@style/Theme.QRAsist.Maestro" />
+        <activity 
+            android:name=".HistorialActivity"
+            android:theme="@style/Theme.QRAsist.Maestro" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        
+    </application>
+
+</manifest>

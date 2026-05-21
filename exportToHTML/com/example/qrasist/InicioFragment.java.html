@@ -1,0 +1,266 @@
+<html>
+<head>
+<title>InicioFragment.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+InicioFragment.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">qrasist</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">Context</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">Intent</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">SharedPreferences</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">os</span><span class="s2">.</span><span class="s1">Bundle</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">LayoutInflater</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">View</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">ViewGroup</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">TextView</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.</span><span class="s1">NonNull</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.</span><span class="s1">Nullable</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">fragment</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">Fragment</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">recyclerview</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">LinearLayoutManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">recyclerview</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">RecyclerView</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">qrasist</span><span class="s2">.</span><span class="s1">adapters</span><span class="s2">.</span><span class="s1">AsistenciaRecienteAdapter</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">qrasist</span><span class="s2">.</span><span class="s1">database</span><span class="s2">.</span><span class="s1">DBHelper</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">qrasist</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">Asistencia</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">qrasist</span><span class="s2">.</span><span class="s1">models</span><span class="s2">.</span><span class="s1">Maestro</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">google</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">material</span><span class="s2">.</span><span class="s1">floatingactionbutton</span><span class="s2">.</span><span class="s1">ExtendedFloatingActionButton</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">SimpleDateFormat</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Calendar</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Date</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Locale</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">volley</span><span class="s2">.</span><span class="s1">Request</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">volley</span><span class="s2">.</span><span class="s1">RequestQueue</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">volley</span><span class="s2">.</span><span class="s1">toolbox</span><span class="s2">.</span><span class="s1">JsonArrayRequest</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">volley</span><span class="s2">.</span><span class="s1">toolbox</span><span class="s2">.</span><span class="s1">Volley</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">qrasist</span><span class="s2">.</span><span class="s1">ApiHelper</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">json</span><span class="s2">.</span><span class="s1">JSONObject</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">InicioFragment </span><span class="s0">extends </span><span class="s1">Fragment </span><span class="s2">{</span>
+
+    <span class="s0">private </span><span class="s1">DBHelper db</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">SharedPreferences prefs</span><span class="s2">;</span>
+    <span class="s0">private int </span><span class="s1">maestroId</span><span class="s2">, </span><span class="s1">grupoId</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">TextView tvSaludo</span><span class="s2">, </span><span class="s1">tvNombreMaestro</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">TextView tvStatAsistencias</span><span class="s2">, </span><span class="s1">tvStatTareas</span><span class="s2">, </span><span class="s1">tvStatAlumnos</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">RecyclerView rvUltimasAsistencias</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">ExtendedFloatingActionButton fabNuevaTarea</span><span class="s2">;</span>
+
+    <span class="s1">@Nullable</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">View onCreateView</span><span class="s2">(</span><span class="s1">@NonNull LayoutInflater inflater</span><span class="s2">, </span><span class="s1">@Nullable ViewGroup container</span><span class="s2">, </span><span class="s1">@Nullable Bundle savedInstanceState</span><span class="s2">) {</span>
+        <span class="s1">View view </span><span class="s2">= </span><span class="s1">inflater</span><span class="s2">.</span><span class="s1">inflate</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">fragment_inicio</span><span class="s2">, </span><span class="s1">container</span><span class="s2">, </span><span class="s0">false</span><span class="s2">);</span>
+
+        <span class="s1">db </span><span class="s2">= </span><span class="s0">new </span><span class="s1">DBHelper</span><span class="s2">(</span><span class="s1">getContext</span><span class="s2">());</span>
+        <span class="s1">prefs </span><span class="s2">= </span><span class="s1">requireActivity</span><span class="s2">().</span><span class="s1">getSharedPreferences</span><span class="s2">(</span><span class="s3">&quot;QRAsistPrefs&quot;</span><span class="s2">, </span><span class="s1">Context</span><span class="s2">.</span><span class="s1">MODE_PRIVATE</span><span class="s2">);</span>
+        <span class="s1">maestroId </span><span class="s2">= </span><span class="s1">prefs</span><span class="s2">.</span><span class="s1">getInt</span><span class="s2">(</span><span class="s3">&quot;user_id&quot;</span><span class="s2">, -</span><span class="s4">1</span><span class="s2">);</span>
+
+        <span class="s1">tvSaludo </span><span class="s2">= </span><span class="s1">view</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_saludo</span><span class="s2">);</span>
+        <span class="s1">tvNombreMaestro </span><span class="s2">= </span><span class="s1">view</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_nombre_maestro</span><span class="s2">);</span>
+        <span class="s1">tvStatAsistencias </span><span class="s2">= </span><span class="s1">view</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_stat_asistencias</span><span class="s2">);</span>
+        <span class="s1">tvStatTareas </span><span class="s2">= </span><span class="s1">view</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_stat_tareas</span><span class="s2">);</span>
+        <span class="s1">tvStatAlumnos </span><span class="s2">= </span><span class="s1">view</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">tv_stat_alumnos</span><span class="s2">);</span>
+        <span class="s1">rvUltimasAsistencias </span><span class="s2">= </span><span class="s1">view</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">rv_ultimas_asistencias</span><span class="s2">);</span>
+        <span class="s1">fabNuevaTarea </span><span class="s2">= </span><span class="s1">view</span><span class="s2">.</span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">fab_nueva_tarea</span><span class="s2">);</span>
+
+        <span class="s1">rvUltimasAsistencias</span><span class="s2">.</span><span class="s1">setLayoutManager</span><span class="s2">(</span><span class="s0">new </span><span class="s1">LinearLayoutManager</span><span class="s2">(</span><span class="s1">getContext</span><span class="s2">()));</span>
+
+        <span class="s1">cargarDatos</span><span class="s2">();</span>
+
+        <span class="s5">// CORRECCIÓN: Código activado para navegar</span>
+        <span class="s1">fabNuevaTarea</span><span class="s2">.</span><span class="s1">setOnClickListener</span><span class="s2">(</span><span class="s1">v -&gt; </span><span class="s2">{</span>
+            <span class="s1">Intent intent </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Intent</span><span class="s2">(</span><span class="s1">getActivity</span><span class="s2">(), </span><span class="s1">GestionTareasActivity</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+            <span class="s1">startActivity</span><span class="s2">(</span><span class="s1">intent</span><span class="s2">);</span>
+        <span class="s2">});</span>
+
+        <span class="s0">return </span><span class="s1">view</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">cargarDatos</span><span class="s2">() {</span>
+
+        <span class="s0">try </span><span class="s2">{</span>
+
+            <span class="s1">String nombre </span><span class="s2">=</span>
+                    <span class="s1">prefs</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span>
+                            <span class="s3">&quot;user_nombre&quot;</span><span class="s2">,</span>
+                            <span class="s3">&quot;Maestro&quot;</span>
+                    <span class="s2">);</span>
+
+            <span class="s1">tvNombreMaestro</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span>
+                    <span class="s1">nombre</span>
+            <span class="s2">);</span>
+
+            <span class="s0">int </span><span class="s1">hora </span><span class="s2">=</span>
+                    <span class="s1">Calendar</span><span class="s2">.</span><span class="s1">getInstance</span><span class="s2">()</span>
+                            <span class="s2">.</span><span class="s1">get</span><span class="s2">(</span>
+                                    <span class="s1">Calendar</span><span class="s2">.</span><span class="s1">HOUR_OF_DAY</span>
+                            <span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">hora </span><span class="s2">&gt;= </span><span class="s4">6 </span><span class="s2">&amp;&amp; </span><span class="s1">hora </span><span class="s2">&lt; </span><span class="s4">12</span><span class="s2">) {</span>
+
+                <span class="s1">tvSaludo</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span>
+                        <span class="s3">&quot;Buenos días,&quot;</span>
+                <span class="s2">);</span>
+
+            <span class="s2">}</span>
+
+            <span class="s0">else if </span><span class="s2">(</span><span class="s1">hora </span><span class="s2">&gt;= </span><span class="s4">12 </span><span class="s2">&amp;&amp; </span><span class="s1">hora </span><span class="s2">&lt; </span><span class="s4">18</span><span class="s2">) {</span>
+
+                <span class="s1">tvSaludo</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span>
+                        <span class="s3">&quot;Buenas tardes,&quot;</span>
+                <span class="s2">);</span>
+
+            <span class="s2">}</span>
+
+            <span class="s0">else </span><span class="s2">{</span>
+
+                <span class="s1">tvSaludo</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span>
+                        <span class="s3">&quot;Buenas noches,&quot;</span>
+                <span class="s2">);</span>
+
+            <span class="s2">}</span>
+
+            <span class="s5">// =====================================</span>
+            <span class="s5">// ALUMNOS</span>
+            <span class="s5">// =====================================</span>
+
+            <span class="s1">JsonArrayRequest alumnosRequest </span><span class="s2">=</span>
+                    <span class="s0">new </span><span class="s1">JsonArrayRequest</span><span class="s2">(</span>
+
+                            <span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">,</span>
+
+                            <span class="s1">ApiHelper</span><span class="s2">.</span><span class="s1">BASE_URL </span><span class="s2">+</span>
+                                    <span class="s3">&quot;alumnos&quot;</span><span class="s2">,</span>
+
+                            <span class="s0">null</span><span class="s2">,</span>
+
+                            <span class="s1">response -&gt; </span><span class="s2">{</span>
+
+                                <span class="s1">tvStatAlumnos</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span>
+
+                                        <span class="s1">String</span><span class="s2">.</span><span class="s1">valueOf</span><span class="s2">(</span>
+                                                <span class="s1">response</span><span class="s2">.</span><span class="s1">length</span><span class="s2">()</span>
+                                        <span class="s2">)</span>
+
+                                <span class="s2">);</span>
+
+                            <span class="s2">},</span>
+
+                            <span class="s1">error -&gt; </span><span class="s2">{</span>
+
+                            <span class="s2">}</span>
+
+                    <span class="s2">);</span>
+
+            <span class="s5">// =====================================</span>
+            <span class="s5">// TAREAS</span>
+            <span class="s5">// =====================================</span>
+
+            <span class="s1">JsonArrayRequest tareasRequest </span><span class="s2">=</span>
+                    <span class="s0">new </span><span class="s1">JsonArrayRequest</span><span class="s2">(</span>
+
+                            <span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">,</span>
+
+                            <span class="s1">ApiHelper</span><span class="s2">.</span><span class="s1">BASE_URL </span><span class="s2">+</span>
+                                    <span class="s3">&quot;tareas&quot;</span><span class="s2">,</span>
+
+                            <span class="s0">null</span><span class="s2">,</span>
+
+                            <span class="s1">response -&gt; </span><span class="s2">{</span>
+
+                                <span class="s1">tvStatTareas</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span>
+
+                                        <span class="s1">String</span><span class="s2">.</span><span class="s1">valueOf</span><span class="s2">(</span>
+                                                <span class="s1">response</span><span class="s2">.</span><span class="s1">length</span><span class="s2">()</span>
+                                        <span class="s2">)</span>
+
+                                <span class="s2">);</span>
+
+                            <span class="s2">},</span>
+
+                            <span class="s1">error -&gt; </span><span class="s2">{</span>
+
+                            <span class="s2">}</span>
+
+                    <span class="s2">);</span>
+
+            <span class="s5">// =====================================</span>
+            <span class="s5">// ASISTENCIAS</span>
+            <span class="s5">// =====================================</span>
+
+            <span class="s1">JsonArrayRequest asistenciasRequest </span><span class="s2">=</span>
+                    <span class="s0">new </span><span class="s1">JsonArrayRequest</span><span class="s2">(</span>
+
+                            <span class="s1">Request</span><span class="s2">.</span><span class="s1">Method</span><span class="s2">.</span><span class="s1">GET</span><span class="s2">,</span>
+
+                            <span class="s1">ApiHelper</span><span class="s2">.</span><span class="s1">BASE_URL </span><span class="s2">+</span>
+                                    <span class="s3">&quot;asistencias&quot;</span><span class="s2">,</span>
+
+                            <span class="s0">null</span><span class="s2">,</span>
+
+                            <span class="s1">response -&gt; </span><span class="s2">{</span>
+
+                                <span class="s1">tvStatAsistencias</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span>
+
+                                        <span class="s1">String</span><span class="s2">.</span><span class="s1">valueOf</span><span class="s2">(</span>
+                                                <span class="s1">response</span><span class="s2">.</span><span class="s1">length</span><span class="s2">()</span>
+                                        <span class="s2">)</span>
+
+                                <span class="s2">);</span>
+
+                            <span class="s2">},</span>
+
+                            <span class="s1">error -&gt; </span><span class="s2">{</span>
+
+                            <span class="s2">}</span>
+
+                    <span class="s2">);</span>
+
+            <span class="s1">RequestQueue queue </span><span class="s2">=</span>
+                    <span class="s1">Volley</span><span class="s2">.</span><span class="s1">newRequestQueue</span><span class="s2">(</span>
+                            <span class="s1">requireContext</span><span class="s2">()</span>
+                    <span class="s2">);</span>
+
+            <span class="s1">queue</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">alumnosRequest</span><span class="s2">);</span>
+
+            <span class="s1">queue</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">tareasRequest</span><span class="s2">);</span>
+
+            <span class="s1">queue</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">asistenciasRequest</span><span class="s2">);</span>
+
+        <span class="s2">}</span>
+
+        <span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+
+            <span class="s1">e</span><span class="s2">.</span><span class="s1">printStackTrace</span><span class="s2">();</span>
+
+        <span class="s2">}</span>
+
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onResume</span><span class="s2">() {</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">onResume</span><span class="s2">();</span>
+        <span class="s1">cargarDatos</span><span class="s2">();</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

@@ -102,363 +102,141 @@ public class GestionAlumnosFragment extends Fragment implements AlumnoAdapter.Al
 
     private void configurarSpinnerGrupos() {
 
-        listaGrupos =
-                new ArrayList<>();
+        listaGrupos = new ArrayList<>();
+        List<String> nombres = new ArrayList<>();
 
-        List<String> nombres =
-                new ArrayList<>();
-
-        String url =
-
-                ApiHelper.BASE_URL +
-
-                        "grupos";
+        String url = ApiHelper.BASE_URL + "grupos";
 
         Log.d("API_TEST", "Iniciando GET: " + url);
 
-        JsonArrayRequest request =
-                new JsonArrayRequest(
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    Log.d("API_TEST", "Éxito GET: " + url + " | Respuesta: " + response.toString());
 
-                        Request.Method.GET,
+                    try {
+                        int indexInicial = 0;
 
-                        url,
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject obj = response.getJSONObject(i);
+                            Grupo grupo = new Grupo();
+                            grupo.setId(Integer.parseInt(obj.getString("id")));
+                            grupo.setNombre(obj.getString("nombre"));
+                            listaGrupos.add(grupo);
+                            nombres.add(grupo.getNombre());
 
-                        null,
-
-                        response -> {
-
-                            Log.d("API_TEST", "Éxito GET: " + url + " | Respuesta: " + response.toString());
-
-                            try {
-
-                                int indexInicial = 0;
-
-                                for (
-                                        int i = 0;
-                                        i < response.length();
-                                        i++
-                                ) {
-
-                                    JSONObject obj =
-                                            response.getJSONObject(i);
-
-                                    Grupo grupo =
-                                            new Grupo();
-
-                                    grupo.setId(
-
-                                            Integer.parseInt(
-
-                                                    obj.getString("id")
-
-                                            )
-
-                                    );
-
-                                    grupo.setNombre(
-                                            obj.getString("nombre")
-                                    );
-
-                                    listaGrupos.add(
-                                            grupo
-                                    );
-
-                                    nombres.add(
-                                            grupo.getNombre()
-                                    );
-
-                                    if (
-
-                                            grupo.getId() ==
-
-                                                    grupoIdSeleccionado
-
-                                    ) {
-
-                                        indexInicial = i;
-
-                                    }
-
-                                }
-
-                                ArrayAdapter<String> adapterSpinner =
-
-                                        new ArrayAdapter<>(
-
-                                                getContext(),
-
-                                                android.R.layout.simple_spinner_item,
-
-                                                nombres
-
-                                        );
-
-                                adapterSpinner.setDropDownViewResource(
-
-                                        android.R.layout.simple_spinner_dropdown_item
-
-                                );
-
-                                spinnerFiltroGrupo.setAdapter(
-                                        adapterSpinner
-                                );
-
-                                spinnerFiltroGrupo.setSelection(
-                                        indexInicial
-                                );
-
+                            if (grupo.getId() == grupoIdSeleccionado) {
+                                indexInicial = i;
                             }
-
-                            catch (Exception e) {
-
-                                e.printStackTrace();
-
-                            }
-
-                        },
-
-                        error -> {
-
-                            Log.e("API_TEST", "Error GET: " + url + " | Error: " + error.toString());
-
-                            Snackbar.make(
-
-                                    rvAlumnos,
-
-                                    "Error cargando grupos",
-
-                                    Snackbar.LENGTH_SHORT
-
-                            ).show();
-
                         }
 
-                );
-
-        RequestQueue queue =
-                Volley.newRequestQueue(
-                        requireContext()
-                );
-
-        queue.add(request);
-
-        spinnerFiltroGrupo.setOnItemSelectedListener(
-
-                new AdapterView.OnItemSelectedListener() {
-
-                    @Override
-                    public void onItemSelected(
-                            AdapterView<?> parent,
-                            View view,
-                            int position,
-                            long id
-                    ) {
-
-                        grupoIdSeleccionado =
-
-                                listaGrupos
-                                        .get(position)
-                                        .getId();
-
-                        cargarAlumnos();
-
+                        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(
+                                getContext(),
+                                android.R.layout.simple_spinner_item,
+                                nombres
+                        );
+                        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerFiltroGrupo.setAdapter(adapterSpinner);
+                        spinnerFiltroGrupo.setSelection(indexInicial);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                    @Override
-                    public void onNothingSelected(
-                            AdapterView<?> parent
-                    ) {
-
-                    }
-
+                },
+                error -> {
+                    Log.e("API_TEST", "Error GET: " + url + " | Error: " + error.toString());
+                    Snackbar.make(rvAlumnos, "Error cargando grupos", Snackbar.LENGTH_SHORT).show();
                 }
-
         );
 
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(request);
+
+        spinnerFiltroGrupo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                grupoIdSeleccionado = listaGrupos.get(position).getId();
+                cargarAlumnos();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     private void cargarAlumnos() {
 
         if (listaAlumnos == null) {
-
-            listaAlumnos =
-                    new ArrayList<>();
-
+            listaAlumnos = new ArrayList<>();
         }
 
         listaAlumnos.clear();
 
-        String url =
-                ApiHelper.BASE_URL +
-                        "alumnos";
+        String url = ApiHelper.BASE_URL + "alumnos";
 
         Log.d("API_TEST", "Iniciando GET: " + url);
 
-        JsonArrayRequest request =
-                new JsonArrayRequest(
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    Log.d("API_TEST", "Éxito GET: " + url + " | Respuesta: " + response.toString());
 
-                        Request.Method.GET,
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject obj = response.getJSONObject(i);
+                            int grupoId = obj.getInt("grupo_id");
 
-                        url,
-
-                        null,
-
-                        response -> {
-
-                            Log.d("API_TEST", "Éxito GET: " + url + " | Respuesta: " + response.toString());
-
-                            try {
-
-                                for (
-                                        int i = 0;
-                                        i < response.length();
-                                        i++
-                                ) {
-
-                                    JSONObject obj =
-                                            response.getJSONObject(i);
-
-                                    int grupoId =
-                                            obj.getInt(
-                                                    "grupo_id"
-                                            );
-
-                                    // =====================================
-                                    // FILTRAR POR GRUPO
-                                    // =====================================
-
-                                    if (
-                                            grupoId !=
-                                                    grupoIdSeleccionado
-                                    ) {
-
-                                        continue;
-
-                                    }
-
-                                    Alumno alumno =
-                                            new Alumno();
-
-                                    alumno.setId(
-                                            obj.getInt("id")
-                                    );
-
-                                    alumno.setNombre(
-                                            obj.getString("nombre")
-                                    );
-
-                                    alumno.setMatricula(
-                                            obj.getString("matricula")
-                                    );
-
-                                    alumno.setGrupoId(
-                                            grupoId
-                                    );
-
-                                    listaAlumnos.add(
-                                            alumno
-                                    );
-
-                                }
-
-                                tvTotalAlumnos.setText(
-
-                                        "Total: " +
-
-                                                listaAlumnos.size() +
-
-                                                " alumno(s)"
-
-                                );
-
-                                if (
-                                        listaAlumnos.isEmpty()
-                                ) {
-
-                                    layoutEmpty.setVisibility(
-                                            View.VISIBLE
-                                    );
-
-                                    rvAlumnos.setVisibility(
-                                            View.GONE
-                                    );
-
-                                }
-
-                                else {
-
-                                    layoutEmpty.setVisibility(
-                                            View.GONE
-                                    );
-
-                                    rvAlumnos.setVisibility(
-                                            View.VISIBLE
-                                    );
-
-                                }
-
-                                if (adapter == null) {
-
-                                    adapter =
-                                            new AlumnoAdapter(
-
-                                                    getContext(),
-
-                                                    listaAlumnos,
-
-                                                    db,
-
-                                                    GestionAlumnosFragment.this
-
-                                            );
-
-                                    rvAlumnos.setAdapter(
-                                            adapter
-                                    );
-
-                                }
-
-                                else {
-
-                                    adapter.notifyDataSetChanged();
-
-                                }
-
+                            // FILTRAR POR GRUPO
+                            if (grupoId != grupoIdSeleccionado) {
+                                continue;
                             }
 
-                            catch (Exception e) {
+                            Alumno alumno = new Alumno();
+                            alumno.setId(obj.getInt("id"));
+                            alumno.setNombre(obj.getString("nombre"));
+                            alumno.setMatricula(obj.getString("matricula"));
+                            alumno.setGrupoId(grupoId);
 
-                                e.printStackTrace();
-
-                            }
-
-                        },
-
-                        error -> {
-
-                            Log.e("API_TEST", "Error GET: " + url + " | Error: " + error.toString());
-
-                            Snackbar.make(
-
-                                    rvAlumnos,
-
-                                    "Error cargando alumnos",
-
-                                    Snackbar.LENGTH_SHORT
-
-                            ).show();
-
+                            listaAlumnos.add(alumno);
                         }
 
-                );
+                        tvTotalAlumnos.setText("Total: " + listaAlumnos.size() + " alumno(s)");
 
-        RequestQueue queue =
-                Volley.newRequestQueue(
-                        requireContext()
-                );
+                        if (listaAlumnos.isEmpty()) {
+                            layoutEmpty.setVisibility(View.VISIBLE);
+                            rvAlumnos.setVisibility(View.GONE);
+                        } else {
+                            layoutEmpty.setVisibility(View.GONE);
+                            rvAlumnos.setVisibility(View.VISIBLE);
+                        }
 
+                        // =============================================
+                        // CODIGO CORREGIDO - Siempre crear nuevo adapter
+                        // =============================================
+                        adapter = new AlumnoAdapter(
+                                getContext(),
+                                listaAlumnos,
+                                db,
+                                GestionAlumnosFragment.this
+                        );
+                        rvAlumnos.setAdapter(adapter);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Log.e("API_TEST", "Error GET: " + url + " | Error: " + error.toString());
+                    Snackbar.make(rvAlumnos, "Error cargando alumnos", Snackbar.LENGTH_SHORT).show();
+                }
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
         queue.add(request);
-
     }
 
     private void configurarBusqueda() {
@@ -494,69 +272,26 @@ public class GestionAlumnosFragment extends Fragment implements AlumnoAdapter.Al
                 .setTitle(R.string.dialog_eliminar_titulo)
                 .setMessage("¿Eliminar a " + alumno.getNombre() + "?")
                 .setPositiveButton("Eliminar", (dialog, which) -> {
-
-
-                    String url =
-
-                            ApiHelper.BASE_URL +
-
-                                    "alumnos/" +
-
-                                    alumno.getId();
+                    String url = ApiHelper.BASE_URL + "alumnos/" + alumno.getId();
 
                     Log.d("API_TEST", "Iniciando DELETE: " + url);
 
-                    StringRequest request =
-                            new StringRequest(
+                    StringRequest request = new StringRequest(
+                            Request.Method.DELETE,
+                            url,
+                            response -> {
+                                Log.d("API_TEST", "Éxito DELETE: " + url + " | Respuesta: " + response);
+                                Snackbar.make(rvAlumnos, "Alumno eliminado", Snackbar.LENGTH_SHORT).show();
+                                cargarAlumnos();
+                            },
+                            error -> {
+                                Log.e("API_TEST", "Error DELETE: " + url + " | Error: " + error.toString());
+                                Snackbar.make(rvAlumnos, "Error eliminando alumno", Snackbar.LENGTH_SHORT).show();
+                            }
+                    );
 
-                                    Request.Method.DELETE,
-
-                                    url,
-
-                                    response -> {
-
-                                        Log.d("API_TEST", "Éxito DELETE: " + url + " | Respuesta: " + response);
-
-                                        Snackbar.make(
-
-                                                rvAlumnos,
-
-                                                "Alumno eliminado",
-
-                                                Snackbar.LENGTH_SHORT
-
-                                        ).show();
-
-                                        cargarAlumnos();
-
-                                    },
-
-                                    error -> {
-
-                                        Log.e("API_TEST", "Error DELETE: " + url + " | Error: " + error.toString());
-
-                                        Snackbar.make(
-
-                                                rvAlumnos,
-
-                                                "Error eliminando alumno",
-
-                                                Snackbar.LENGTH_SHORT
-
-                                        ).show();
-
-                                    }
-
-                            );
-
-                    RequestQueue queue =
-                            Volley.newRequestQueue(
-                                    requireContext()
-                            );
-
+                    RequestQueue queue = Volley.newRequestQueue(requireContext());
                     queue.add(request);
-
-
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
